@@ -1,0 +1,26 @@
+name: "Balena Plant II"
+description: "Industrial automation implemented in as a balena plant project"
+type: "sw.application"
+joinable: false
+post-provisioning: >-
+  ## Usage instructions
+  After flashing your device allow some time for the application to download.
+  Follow the instructions in the readme to set up the hardware: https://github.com/builder555/balena-plant-2
+assets:
+  repository:
+    type: "blob.asset"
+    data:
+      url: "https://github.com/builder555/balena-plant-ii"
+  logo:
+    type: "blob.asset"
+    data:
+      url: "https://raw.githubusercontent.com/builder555/balena-plant-ii/master/logo.png"
+data:
+  defaultDeviceType: "raspberrypi3"
+  supportedDeviceTypes:
+    - raspberry-pi2
+    - raspberrypi3
+    - raspberrypi3-64
+    - raspberrypi4-64
+    - raspberrypi400-64
+    - fincm3

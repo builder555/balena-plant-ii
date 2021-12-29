@@ -1,0 +1,66 @@
+version: '2.1'
+services:
+  motor:
+    privileged: true
+    image: builder555/basic-motor
+    restart: always
+    environment: 
+      - INPUT=logic_2
+      - PIN=27
+
+  gate-button-or-logic:
+    image: builder555/logic-block
+    restart: always
+    environment: 
+      - INPUTS=logic_1,button_1
+      - OUTPUT=logic_2
+      - GATE=or
+
+  gate-sensor-and-weather:
+    image: builder555/logic-block
+    restart: always
+    environment: 
+      - INPUTS=sensor_1,weather_1
+      - OUTPUT=logic_1
+      - GATE=and
+
+  sensor:
+    privileged: true
+    image: builder555/basic-sensor
+    restart: always
+    environment:
+      - OUTPUT=sensor_1
+      - PIN=17
+
+  weather:
+    privileged: true
+    image: builder555/binary-weather
+    restart: always
+    environment:
+      - OUTPUT=weather_1
+      - ABOVE_TEMPERATURE=10
+      - BELOW_PRECIPITATION=15
+
+  ws-server:
+    image: builder555/ws-mqtt-binary-link
+    restart: always
+    ports:
+      - "8765:8765"
+    environment: 
+      - OUTPUT=button_1
+      - WSPORT=8765
+
+  reverse-proxy:
+    restart: always
+    image: builder555/reverse-proxy-ws
+    ports:
+      - "80:80"
+    environment: 
+      - WSPORT=8765
+      - WSHOST=ws-server
+
+  mqtt:
+    image: eclipse-mosquitto:1.6.15
+    restart: always
+    ports:
+      - "1883:1883"
